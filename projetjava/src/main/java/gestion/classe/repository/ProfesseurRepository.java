@@ -1,5 +1,9 @@
 package gestion.classe.repository;
 
-public interface ProfesseurRepository {
+import com.database.services.Repository;
+
+import gestion.classe.entities.Professeur;
+
+public interface ProfesseurRepository extends Repository<Professeur>{
     
 }

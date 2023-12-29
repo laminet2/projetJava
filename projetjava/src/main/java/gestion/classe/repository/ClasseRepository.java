@@ -1,5 +1,9 @@
 package gestion.classe.repository;
 
-public interface ClasseRepository {
+import com.database.services.Repository;
+
+import gestion.classe.entities.Classe;
+
+public interface ClasseRepository extends Repository<Classe>{
     
 }
