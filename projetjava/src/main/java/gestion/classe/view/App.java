@@ -5,9 +5,11 @@ import java.util.Scanner;
 
 import com.database.services.Database;
 
-import gestion.classe.repository.ClasseRepository;
-import gestion.classe.services.ClasseService;
-import gestion.classe.services.CoursService;
+import gestion.classe.repository.*;
+import gestion.classe.repository.implementation.*;
+import gestion.classe.services.*;
+import gestion.classe.services.implementation.*;
+
 import jsontomap.JsonToMap;
 
 import com.database.services.implementation.MySqlimple;
@@ -21,14 +23,40 @@ public class App{
     
     
     public static void main(String[] args) throws Exception{
-        System.out.println(data.get("classeRepository"));
+        //ClasseRepository
         Class classeRepositoryImplementation=Class.forName(data.get("classeRepository"));
         ClasseRepository classeRepository =(ClasseRepository) classeRepositoryImplementation.newInstance();
+        
+        //ClasseService
         Class classeServiceImplementation= Class.forName(data.get("classeService")) ;
-        java.lang.reflect.Constructor<ClasseService> constructor = classeServiceImplementation.getConstructor(ClasseService.class);
-        ClasseService classeService= constructor.newInstance(classeRepository);
+        java.lang.reflect.Constructor<?> constructor = classeServiceImplementation.getConstructor(ClasseRepository.class);
+        ClasseService classeService=(ClasseService) constructor.newInstance(classeRepository);
+
+        //CoursRepository
+        Class coursRepositoryImplementation=Class.forName(data.get("coursRepository"));
+        CoursRepository coursRepository =(CoursRepository) coursRepositoryImplementation.newInstance();
+
+        //CoursServices
+        Class coursServiceImplementation= Class.forName(data.get("coursService")) ;
+        constructor = coursServiceImplementation.getConstructor(CoursRepository.class);
+        CoursService coursService=(CoursService) constructor.newInstance(coursRepository);
+
+        //ModuleRepository
+        Class moduleRepositoryImpl=Class.forName(data.get("moduleRepository"));
+        ModuleRepository moduleRepository=(ModuleRepository) moduleRepositoryImpl.newInstance();
+
+        //ModuleServices
+        Class modulesServiceImple= Class.forName(data.get("moduleService"));
+        constructor = modulesServiceImple.getConstructor(ModuleRepository.class);
+        ModuleService moduleService=(ModuleService) constructor.newInstance(moduleRepository);
+
+        //ProfesseurRepository
+        Class professeurRepositoryImple=Class.forName(data.get("professeurRepository"));
+        ProfesseurRepository professeurRepository=(ProfesseurRepository) professeurRepositoryImple.newInstance();
+
+
         Scanner sc = new Scanner(System.in);
-        classeService.ajouterClasse(null);
+        classeService.listerClasses();
         int choix;
         do {
             System.out.println("1-Gerer Classe ");

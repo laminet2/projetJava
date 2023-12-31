@@ -1,12 +1,12 @@
 {
-    "coursService":"CoursServiceImple",
-    "classeService":"ClasseServiceImple",
-    "moduleService":"ModuleServiceImple",
-    "professeurService":"ProfesseurServiceImple",
-    "salleService":"SalleServiceImple",
-    "coursRepository":"CoursRepositoryImpl",
-    "classeRepository":"ClasseRepositoryImple",
-    "moduleRepository":"ModuleRepositoryImple",
-    "professeurRepository":"ProfesseurRepositoryImple",
-    "salleRepository":"SalleRepositoryImple"
+    "coursService":"gestion.classe.services.implementation.CoursServiceImple",
+    "classeService":"gestion.classe.services.implementation.ClasseServiceImple",
+    "moduleService":"gestion.classe.services.implementation.ModuleServiceImple",
+    "professeurService":"gestion.classe.services.implementation.ProfesseurServiceImple",
+    "salleService":"gestion.classe.services.implementation.SalleServiceImple",
+    "coursRepository":"gestion.classe.repository.implementation.CoursRepositoryImpl",
+    "classeRepository":"gestion.classe.repository.implementation.ClasseRepositoryImple",
+    "moduleRepository":"gestion.classe.repository.implementation.ModuleRepositoryImple",
+    "professeurRepository":"gestion.classe.repository.implementation.ProfesseurRepositoryImple",
+    "salleRepository":"gestion.classe.repository.implementation.SalleRepositoryImple"
 }

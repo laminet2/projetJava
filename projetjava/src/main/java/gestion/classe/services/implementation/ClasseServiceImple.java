@@ -11,6 +11,7 @@ import gestion.classe.services.ClasseService;
 public class ClasseServiceImple implements ClasseService{
     private ClasseRepository classeRepository;
     
+    
     public ClasseServiceImple(ClasseRepository classeRepository){
         this.classeRepository=classeRepository;
     }
@@ -28,9 +29,11 @@ public class ClasseServiceImple implements ClasseService{
     }
 
     @Override
-    public ArrayList<Classe> listerClasses(Classe classe) {
+    public ArrayList<Classe> listerClasses() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listerClasses'");
+        System.out.println("thats work");
+        ArrayList<Classe> classes=new ArrayList<>();
+        return classes;
     }
 
     @Override
