@@ -1,0 +1,12 @@
+{
+    "coursService":"CoursServiceImple",
+    "classeService":"ClasseServiceImple",
+    "moduleService":"ModuleServiceImple",
+    "professeurService":"ProfesseurServiceImple",
+    "salleService":"SalleServiceImple",
+    "coursRepository":"CoursRepositoryImpl",
+    "classeRepository":"ClasseRepositoryImple",
+    "moduleRepository":"ModuleRepositoryImple",
+    "professeurRepository":"ProfesseurRepositoryImple",
+    "salleRepository":"SalleRepositoryImple"
+}

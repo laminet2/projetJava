@@ -7,5 +7,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class Salle {
-    private int id;   
+    private int id;  
+    private String libelle;
+    private boolean isArchived;
+    
 }

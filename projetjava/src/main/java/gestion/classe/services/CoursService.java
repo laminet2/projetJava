@@ -1,6 +1,8 @@
 package gestion.classe.services;
 
-public interface CoursService {
+import gestion.classe.entities.Cours;
 
+public interface CoursService {
+    boolean plannifierCours(Cours cours);
     
 } 

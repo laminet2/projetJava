@@ -1,10 +1,34 @@
 package gestion.classe.view;
 
+import java.util.Map;
 import java.util.Scanner;
 
-public class App {
-    public static void main(String[] args) {
+import com.database.services.Database;
+
+import gestion.classe.repository.ClasseRepository;
+import gestion.classe.services.ClasseService;
+import gestion.classe.services.CoursService;
+import jsontomap.JsonToMap;
+
+import com.database.services.implementation.MySqlimple;
+
+public class App{
+    Database dataBase =new MySqlimple("jdbc:mysql://localhost:3306/javaprojetdatabase","root","");
+
+    static JsonToMap json= new JsonToMap("configuration.json");
+    static Map <String,String> data=json.convert();
+
+    
+    
+    public static void main(String[] args) throws Exception{
+        System.out.println(data.get("classeRepository"));
+        Class classeRepositoryImplementation=Class.forName(data.get("classeRepository"));
+        ClasseRepository classeRepository =(ClasseRepository) classeRepositoryImplementation.newInstance();
+        Class classeServiceImplementation= Class.forName(data.get("classeService")) ;
+        java.lang.reflect.Constructor<ClasseService> constructor = classeServiceImplementation.getConstructor(ClasseService.class);
+        ClasseService classeService= constructor.newInstance(classeRepository);
         Scanner sc = new Scanner(System.in);
+        classeService.ajouterClasse(null);
         int choix;
         do {
             System.out.println("1-Gerer Classe ");
@@ -19,16 +43,68 @@ public class App {
             System.out.println("10-Afiicher les cours d'une classes");
             System.out.println("11-Quittez");
             choix=sc.nextInt();
+            int choix1;
 
             switch (choix) {
+
                 case 1:
+                    //Gerer Classe
+                    System.out.println("1- Lister Classe");
+                    System.out.println("2- Ajouter Classe");
+                    System.out.println("3- Modifier Classe");
+                    System.out.println("4- Archiver une Classe");
+                    choix1=sc.nextInt();
+                    switch (choix1) {
+                        case 1:
+                            
+                            break;
+                        case 2:
+                            break;
                     
+                        default:
+                            break;
+                    }
+
                     break;
-            
+                case 2:
+                    //Gerer Module
+                    System.out.println("1- Lister Module");
+                    System.out.println("2- Ajouter Module");
+                    System.out.println("3- Modifier Module");
+                    System.out.println("4- Archiver une Module");
+                    break;
+                case 3:
+                    //Affecter Module a une classe
+                    break;
+                case 4:
+                    //Afficher les Modules d'une Classe
+                    break;
+                case 5:
+                    //Afficher les classes qui font un modules
+
+                    break;
+                case 6:
+                    //Gerer Professeur
+
+                    break;
+                case 7:
+                    //Afficher les classes d'un Prof ainsi que les modules enseigner
+                    break;
+                case 8:
+                    //Gerer les salles
+                    break;
+                case 9:
+                    //Plannifier Cours
+                    break;
+                case 10:
+                    //Afiicher les cours d'une classes
+                    break;
                 default:
+                    System.out.println("------ GOOD-BYE ------");
                     break;
             }
+            
 
-        } while (choix!=12);
+        }while(choix!=12);
     }
 }
