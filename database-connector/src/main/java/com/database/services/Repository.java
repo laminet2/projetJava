@@ -3,8 +3,9 @@ package com.database.services;
 import java.util.ArrayList;
 
 public interface Repository<T> {
-    int insert(T data);
+     int insertOrUpdate(T data);
      ArrayList<T> findAll();
      T findById(int id);
+     boolean archiver(T data);
 
 }

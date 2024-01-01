@@ -8,7 +8,7 @@ import gestion.classe.entities.Module;
 import gestion.classe.entities.Professeur;
 
 public interface ProfesseurService {
-    boolean ajouterProfesseur(Professeur professeur);
+    int ajouterProfesseur(Professeur professeur);
     ArrayList<Professeur> listerProfesseur();
     boolean modifierProfesseur(Professeur professeur);
     boolean archiverPorfesseur(Professeur professeur);

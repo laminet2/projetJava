@@ -9,7 +9,7 @@ public interface ModuleService {
     ArrayList<Module> listerModule();
     boolean archiverModule(Module module);
     boolean modifierModule(Module module);
-    boolean ajouterModule(Module module);
+    int ajouterModule(Module module);
             
     boolean affecterModuleAUneClasse(Module module,Classe classe);
     ArrayList<Classe> afficherClasseByModule(Module module);

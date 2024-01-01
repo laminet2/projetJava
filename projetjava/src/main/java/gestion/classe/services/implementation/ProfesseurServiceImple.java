@@ -17,7 +17,7 @@ public class ProfesseurServiceImple implements ProfesseurService{
     }
 
     @Override
-    public boolean ajouterProfesseur(Professeur professeur) {
+    public int ajouterProfesseur(Professeur professeur) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'ajouterProfesseur'");
     }

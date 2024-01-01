@@ -2,11 +2,16 @@ package gestion.classe.repository.implementation;
 
 import java.util.ArrayList;
 
+import com.database.services.Database;
+
 import gestion.classe.entities.Cours;
 import gestion.classe.repository.CoursRepository;
 
 public class CoursRepositoryImpl implements CoursRepository{
-
+    private Database database;
+    public CoursRepositoryImpl(Database database){
+        this.database=database;
+    }
     
     @Override
     public ArrayList<Cours> findAll() {
@@ -21,9 +26,15 @@ public class CoursRepositoryImpl implements CoursRepository{
     }
 
     @Override
-    public int insert(Cours arg0) {
+    public int insertOrUpdate(Cours arg0) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        throw new UnsupportedOperationException("Unimplemented method 'insertOrUpdate'");
+    }
+
+    @Override
+    public boolean archiver(Cours arg0) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'archiver'");
     }
     
 }

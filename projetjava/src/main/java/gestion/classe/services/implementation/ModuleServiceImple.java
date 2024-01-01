@@ -28,7 +28,7 @@ public class ModuleServiceImple implements ModuleService{
         throw new UnsupportedOperationException("Unimplemented method 'modifierModule'");
     }
     @Override
-    public boolean ajouterModule(Module module) {
+    public int ajouterModule(Module module) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'ajouterModule'");
     }

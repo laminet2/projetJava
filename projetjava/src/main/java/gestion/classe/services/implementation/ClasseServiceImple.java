@@ -1,10 +1,14 @@
 package gestion.classe.services.implementation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import gestion.classe.entities.Classe;
 import gestion.classe.entities.Cours;
+import gestion.classe.entities.Filiere;
 import gestion.classe.entities.Module;
+import gestion.classe.entities.Niveau;
 import gestion.classe.repository.ClasseRepository;
 import gestion.classe.services.ClasseService;
 
@@ -15,31 +19,46 @@ public class ClasseServiceImple implements ClasseService{
     public ClasseServiceImple(ClasseRepository classeRepository){
         this.classeRepository=classeRepository;
     }
+    
+    @Override
+    public boolean classeExiste(Classe classe) {
+
+        ArrayList<Classe> classes=listerClasses();        
+        for (Classe clas : classes) {
+            System.out.println(clas);
+            if(classe.equals(clas)){
+                System.out.println(clas);
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     @Override
-    public boolean ajouterClasse(Classe classe) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ajouterClasse'");
+    public int ajouterClasse(Classe classe) {
+        if(classeExiste((classe))){
+            return 0;
+        }
+        return this.classeRepository.insertOrUpdate(classe);
     }
 
     @Override
     public boolean archiverClasse(Classe classe) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'archiverClasse'");
+        return classeRepository.archiver(classe);
+
     }
 
     @Override
     public ArrayList<Classe> listerClasses() {
-        // TODO Auto-generated method stub
-        System.out.println("thats work");
-        ArrayList<Classe> classes=new ArrayList<>();
-        return classes;
+        
+        return classeRepository.findAll();
     }
 
     @Override
     public boolean modifierClasse(Classe classe) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modifierClasse'");
+
+        return this.classeRepository.insertOrUpdate(classe)==1;
     }
 
     @Override
@@ -53,5 +72,19 @@ public class ClasseServiceImple implements ClasseService{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'listerCoursByClasse'");
     }
+     @Override
+    public List<Filiere> listerFiliere() {
+        return Arrays.asList(new Filiere("MAIE"),new Filiere("GLRS"),new Filiere("CDSD"));
+    }
+
+    @Override
+    public List<Niveau> listerNiveaux() {
+      
+         return Arrays.asList(new Niveau("Licence1"),new Niveau("Licence2")
+         ,new Niveau("Licence3"));
+    }
+
+    
+
     
 }

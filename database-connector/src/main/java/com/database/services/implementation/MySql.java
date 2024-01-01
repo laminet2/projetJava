@@ -10,7 +10,7 @@ import java.sql.Statement;
 
 import com.database.services.Database;
 
-public class MySqlimple implements Database{
+public class MySql implements Database{
 
     private final String driver="com.mysql.cj.jdbc.Driver";
     private  String url;
@@ -20,7 +20,7 @@ public class MySqlimple implements Database{
     private  Connection conn=null;
     private PreparedStatement ps=null;
 
-    public  MySqlimple(String url,String user,String password){
+    public  MySql(String url,String user,String password){
         this.url=url;
         this.user=user;
         this.password=password;
