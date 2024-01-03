@@ -2,16 +2,22 @@ package gestion.classe.repository.implementation;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.database.services.Database;
 
 import gestion.classe.entities.Classe;
 import gestion.classe.entities.Module;
 import gestion.classe.entities.Professeur;
+import gestion.classe.repository.ClasseRepository;
+import gestion.classe.repository.ModuleRepository;
 import gestion.classe.repository.ProfesseurRepository;
 
 public class ProfesseurRepositoryImple implements ProfesseurRepository{
     private Database database;
+    private ClasseRepository classeRepository;
+    private ModuleRepository moduleRepository;
     private final String SQL_INSERT="INSERT INTO `professeur` (`nomComplet`,`isArchived`) VALUES (?,?)";
     private final String SQL_UPDATE="UPDATE `professeur` SET `nomComplet` = ? WHERE id = ? ";
     private final String SQL_ARCHIVER="UPDATE `professeur` SET `isArchived`= ? WHERE id = ?";
@@ -19,9 +25,15 @@ public class ProfesseurRepositoryImple implements ProfesseurRepository{
     private final String SQL_ADD_MODULE_PROF="INSERT INTO `profmodule` (`id`, `idProf`, `idMod`) VALUES (NULL, ?, ?)";
     private final String SQL_VERIFY_MODULE_PROF="SELECT * FROM `profmodule` WHERE `idProf`=? AND `idMod`=?";
     private final String SQL_SELECT_PROF_BY_ID="SELECT * FROM professeur where isArchived=? AND id=?";
+    private final String SQL_SELECT_CLASSE_BY_PROF="SELECT * FROM classeprofesseur where idProf=?";
+    private final String SQL_FIND_ALL_PROFESSEUR_BY_MODULE="SELECT * FROM `profmodule` where idMod=?";
+    private final String SQL_FIND_CLASSE_BY_PORFESSEUR_AND_MODULE="SELECT * FROM `profmodule` where `idProf`= ? and `idMod`= ?   ";
 
-    public ProfesseurRepositoryImple(Database database){
+
+    public ProfesseurRepositoryImple(Database database,ClasseRepository classeRepository,ModuleRepository moduleRepository){
         this.database=database;
+        this.classeRepository=classeRepository;
+        this.moduleRepository=moduleRepository;
     }
     @Override
     public ArrayList<Professeur> findAll() {
@@ -141,6 +153,74 @@ public class ProfesseurRepositoryImple implements ProfesseurRepository{
            e.printStackTrace();
        }
        return false;
+    }
+
+    @Override
+    public Map<Classe, ArrayList<Module>> getModulesAndClasseProfesseur(Professeur professeur) {
+        Map<Classe,ArrayList<Module>> classeModules = new HashMap<>();
+
+        try {
+            database.openConnexion();
+            database.initPreparedStatement(SQL_SELECT_CLASSE_BY_PROF);
+            database.getPs().setInt(1, professeur.getId());
+            ResultSet resultSet= database.executeSelect();
+            while (resultSet.next()) {
+                Classe classe=this.classeRepository.findById(resultSet.getInt("idClasse"));
+                if(!classeModules.keySet().contains(classe)){
+                    classeModules.put(classe,new ArrayList<Module>());
+                }
+                Module module=moduleRepository.findById(resultSet.getInt("idModule"));
+                classeModules.get(classe).add(module);
+            }
+            resultSet.close();
+            database.closeConnexion();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classeModules;
+
+    }
+
+    @Override
+    public ArrayList<Professeur> getProfesseurByModule(Module module) {
+        ArrayList<Professeur> professeurs=new ArrayList<>();
+        try {
+            database.openConnexion();
+            database.initPreparedStatement(SQL_FIND_ALL_PROFESSEUR_BY_MODULE);
+            database.getPs().setInt(1, module.getId());
+            ResultSet resultSet= database.executeSelect();
+            while (resultSet.next()) {
+                professeurs.add(findById(resultSet.getInt("id")));
+            }
+            resultSet.close();
+            database.closeConnexion();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return professeurs;
+    }
+    @Override
+    public ArrayList<Classe> findClasseByModuleAndProfesseur(Professeur professeur, Module module) {
+        ArrayList<Classe> classes=new ArrayList<>();
+        try {
+             database.openConnexion();
+                    database.initPreparedStatement(SQL_FIND_CLASSE_BY_PORFESSEUR_AND_MODULE);
+                     database.getPs().setInt(1,professeur.getId());
+                    database.getPs().setInt(2,module.getId());
+                    ResultSet resultSet=database.executeSelect();
+                    while (resultSet.next()) {
+                        
+                        Classe classe= classeRepository.findById(resultSet.getInt("idClasse"));
+                        
+                    classes.add(classe);
+                    }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return classes;
     }
     
 }

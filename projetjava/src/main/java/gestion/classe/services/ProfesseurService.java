@@ -13,8 +13,10 @@ public interface ProfesseurService {
     boolean modifierProfesseur(Professeur professeur);
     boolean archiverPorfesseur(Professeur professeur);
 
-    Map<Classe,ArrayList<Module>> afficherClasseAndModuleEnseignerByProfesseur(Professeur professeur,Classe classe);
+    Map<Classe,ArrayList<Module>> afficherClasseAndModuleEnseignerByProfesseur(Professeur professeur);
     ArrayList<Module> afficherModuleByProfesseur(Professeur prof);
     boolean affecterModuleAProfesseur(Professeur prof,Module module);
     boolean professeurExiste(Professeur professeur);
+    ArrayList<Professeur> listerProfesseurByModule(Module module);
+    ArrayList<Classe> listerClasseProfesseurByModule(Professeur prof,Module module);
 }

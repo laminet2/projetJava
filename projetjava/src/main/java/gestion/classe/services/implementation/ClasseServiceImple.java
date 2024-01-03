@@ -64,8 +64,7 @@ public class ClasseServiceImple implements ClasseService{
 
     @Override
     public ArrayList<Module> listerModulesByClasse(Classe classe) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listerModulesByClasse'");
+       return classeRepository.findModuleByClasse(classe);
     }
 
     @Override
@@ -96,6 +95,11 @@ public class ClasseServiceImple implements ClasseService{
         //     return true;  
         //   }
         // return false;  
+    }
+
+    @Override
+    public ArrayList<Classe> listerClasseByModule(Module module) {
+        return classeRepository.findClasseByModule(module);
     }
     
 

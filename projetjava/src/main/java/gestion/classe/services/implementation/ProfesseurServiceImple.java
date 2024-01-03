@@ -42,10 +42,8 @@ public class ProfesseurServiceImple implements ProfesseurService{
     }
 
     @Override
-    public Map<Classe, ArrayList<Module>> afficherClasseAndModuleEnseignerByProfesseur(Professeur professeur,
-            Classe classe) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'afficherClasseAndModuleEnseignerByProfesseur'");
+    public Map<Classe, ArrayList<Module>> afficherClasseAndModuleEnseignerByProfesseur(Professeur professeur) {
+        return professeurRepository.getModulesAndClasseProfesseur(professeur);
     }
 
     @Override
@@ -69,6 +67,15 @@ public class ProfesseurServiceImple implements ProfesseurService{
     @Override
     public boolean affecterModuleAProfesseur(Professeur prof, Module module) {
         return professeurRepository.addModuleProf(prof,module);
+    }
+    @Override
+    public ArrayList<Professeur> listerProfesseurByModule(Module module) {
+        return professeurRepository.getProfesseurByModule( module);
+    }
+
+    @Override 
+    public ArrayList<Classe> listerClasseProfesseurByModule(Professeur prof,Module module){
+        return professeurRepository.findClasseByModuleAndProfesseur( prof, module);
     }
     
 }

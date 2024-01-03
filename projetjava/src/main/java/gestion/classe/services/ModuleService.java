@@ -12,8 +12,8 @@ public interface ModuleService {
     boolean modifierModule(Module module);
     int ajouterModule(Module module);
             
-    ArrayList<Classe> afficherClasseByModule(Module module);
-    ArrayList<Professeur> listerProfesseurByModule(Module module);
+    // ArrayList<Classe> afficherClasseByModule(Module module);
+    //ArrayList<Professeur> listerProfesseurByModule(Module module);
 
     boolean moduleExiste(Module module);
 }

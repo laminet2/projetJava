@@ -19,7 +19,14 @@ public class Cours {
     private LocalTime heureFin;
     private boolean isArchived=false;
     private Module module;
+    private String lieux;
+    private String lien;
+    private Salle salle;
     private ArrayList<Classe>classes;
+    public Cours(int id,String libelle){
+        this.id=id;
+        this.libelle=libelle;
+    }
     @Override
     public int hashCode() {
         final int prime = 31;

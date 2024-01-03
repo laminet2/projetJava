@@ -12,5 +12,6 @@ import gestion.classe.entities.Professeur;
 public interface ClasseRepository extends Repository<Classe>{
     boolean addModuleClasse(Classe classe,Professeur prof,Module module);
     Map<Professeur, ArrayList<Module>> getModulesAndProfesseurClasse(Classe classe) ;
-
+    ArrayList<Module> findModuleByClasse(Classe classe);
+    ArrayList<Classe> findClasseByModule(Module module);
 }

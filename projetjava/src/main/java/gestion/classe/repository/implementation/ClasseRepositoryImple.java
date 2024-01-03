@@ -26,14 +26,14 @@ public class ClasseRepositoryImple implements ClasseRepository{
     private final String SQL_VERIFY_MODULE_EXIST="SELECT * FROM `classeprofesseur` WHERE `idClasse`=? and `idModule`=? ";
     private final String SQL_SELECT_PROFESSEUR_BY_CLASSE="SELECT * FROM `classeprofesseur` WHERE `idClasse`=?";
     private final String SQL_SELECT_CLASSE_BY_ID="SELECT * FROM classe where isArchived=? and `id`=?";
+    private final String SQL_FIND_MODULE_BY_CLASSE="SELECT * FROM classeprofesseur where  `idClasse`=?";
+    private final String SQL_FIND_CLASSE_BY_MODULE="SELECT * FROM classeprofesseur where  `idModule`=?";
     
 
     private Database dataBase;
-    private ProfesseurRepository professeurRepository;
     private ModuleRepository moduleRepository;
-    public ClasseRepositoryImple(Database database,ProfesseurRepository professeurRepository,ModuleRepository moduleRepository){
+    public ClasseRepositoryImple(Database database,ModuleRepository moduleRepository){
         this.dataBase=database;
-        this.professeurRepository=professeurRepository;
         this.moduleRepository=moduleRepository;
     }
     @Override
@@ -125,14 +125,14 @@ public class ClasseRepositoryImple implements ClasseRepository{
                                           ,resultSet.getString("niveau") 
                                           ,resultSet.getString("filiere"));
 
-                            dataBase.initPreparedStatement(SQL_SELECT_PROFESSEUR_BY_CLASSE);
-                            dataBase.getPs().setInt(1,resultSet.getInt("id"));
-                            ResultSet resultSet2=dataBase.executeSelect();
-                            ArrayList<Professeur>professeurs=new ArrayList<>();
-                            while (resultSet2.next()) {
-                               professeurs.add(professeurRepository.findById(resultSet2.getInt("id")));
-                            }
-                         data.setProfesseurs(professeurs);
+                        //     dataBase.initPreparedStatement(SQL_SELECT_PROFESSEUR_BY_CLASSE);
+                        //     dataBase.getPs().setInt(1,resultSet.getInt("id"));
+                        //     ResultSet resultSet2=dataBase.executeSelect();
+                        //     ArrayList<Professeur>professeurs=new ArrayList<>();
+                        //     while (resultSet2.next()) {
+                        //        professeurs.add(professeurRepository.findById(resultSet2.getInt("id")));
+                        //     }
+                        //  data.setProfesseurs(professeurs);
 
                          datas.add(data);                       
                       }
@@ -173,25 +173,25 @@ public class ClasseRepositoryImple implements ClasseRepository{
     public Map<Professeur, ArrayList<Module>> getModulesAndProfesseurClasse(Classe classe) {
         Map<Professeur,ArrayList<Module>> professeurModules = new HashMap<>();
 
-        try {
-            dataBase.openConnexion();
-            dataBase.initPreparedStatement(SQL_SELECT_MODULE_CLASSE);
-            dataBase.getPs().setInt(1, classe.getId());
-            ResultSet resultSet= dataBase.executeSelect();
-            while (resultSet.next()) {
-                Professeur professeur=professeurRepository.findById(resultSet.getInt("idProf"));
-                if(!professeurModules.keySet().contains(professeur)){
-                    professeurModules.put(professeur,new ArrayList<Module>());
-                }
-                Module module=moduleRepository.findById(resultSet.getInt("idModule"));
-                professeurModules.get(professeur).add(module);
-            }
-            resultSet.close();
-            dataBase.closeConnexion();
+        // try {
+        //     dataBase.openConnexion();
+        //     dataBase.initPreparedStatement(SQL_SELECT_MODULE_CLASSE);
+        //     dataBase.getPs().setInt(1, classe.getId());
+        //     ResultSet resultSet= dataBase.executeSelect();
+        //     while (resultSet.next()) {
+        //         Professeur professeur=professeurRepository.findById(resultSet.getInt("idProf"));
+        //         if(!professeurModules.keySet().contains(professeur)){
+        //             professeurModules.put(professeur,new ArrayList<Module>());
+        //         }
+        //         Module module=moduleRepository.findById(resultSet.getInt("idModule"));
+        //         professeurModules.get(professeur).add(module);
+        //     }
+        //     resultSet.close();
+        //     dataBase.closeConnexion();
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
         return professeurModules;
 
     }
@@ -222,5 +222,49 @@ public class ClasseRepositoryImple implements ClasseRepository{
             e.printStackTrace();
         }
         return false;
+    }
+    @Override
+    public ArrayList<Module> findModuleByClasse(Classe classe) {
+        ArrayList<Module> datas=new ArrayList<>();
+                  try {
+                      dataBase.openConnexion();
+                        dataBase.initPreparedStatement(SQL_FIND_MODULE_BY_CLASSE);
+                        dataBase.getPs().setInt(1, classe.getId());
+
+                    ResultSet resultSet=dataBase.executeSelect();
+                    while (resultSet.next()) {
+                        
+                        Module data=moduleRepository.findById(resultSet.getInt("idModule"));
+                         datas.add(data);                       
+                      }
+                      resultSet.close();
+                   dataBase.closeConnexion();
+                } catch (SQLException e) {
+
+                    e.printStackTrace();
+                }
+            return datas;
+    }
+    @Override
+    public ArrayList<Classe> findClasseByModule(Module module) {
+        ArrayList<Classe> datas=new ArrayList<>();
+                  try {
+                      dataBase.openConnexion();
+                        dataBase.initPreparedStatement(SQL_FIND_CLASSE_BY_MODULE);
+                        dataBase.getPs().setInt(1, module.getId());
+
+                    ResultSet resultSet=dataBase.executeSelect();
+                    while (resultSet.next()) {
+                        
+                        Classe data=findById(resultSet.getInt("idClasse"));
+                         datas.add(data);                       
+                      }
+                      resultSet.close();
+                   dataBase.closeConnexion();
+                } catch (SQLException e) {
+
+                    e.printStackTrace();
+                }
+            return datas;
     }
 }

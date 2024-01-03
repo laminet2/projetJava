@@ -17,11 +17,12 @@ public interface ClasseService {
     boolean modifierClasse(Classe classe);
 
     ArrayList<Module> listerModulesByClasse(Classe classe);
+    ArrayList<Classe> listerClasseByModule(Module module);
     ArrayList<Cours> listerCoursByClasse(Classe classe);
 
     List<Filiere> listerFiliere();
     List<Niveau> listerNiveaux();
-    
+
     boolean affecterModuleAUneClasse(Module module,Professeur professeur,Classe classe);
     boolean classeExiste(Classe classe);
 }

@@ -35,11 +35,11 @@ public class ModuleServiceImple implements ModuleService{
     }
 
    
-    @Override
-    public ArrayList<Classe> afficherClasseByModule(Module module) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'afficherClasseByModule'");
-    }
+    // @Override
+    // public ArrayList<Classe> afficherClasseByModule(Module module) {
+    //     // TODO Auto-generated method stub
+    //     throw new UnsupportedOperationException("Unimplemented method 'afficherClasseByModule'");
+    // }
 
     @Override
     public boolean moduleExiste(Module module){
@@ -53,10 +53,7 @@ public class ModuleServiceImple implements ModuleService{
         return false;
 
     }
-    @Override
-    public ArrayList<Professeur> listerProfesseurByModule(Module module) {
-        return moduleRepository.getProfesseur( module);
-    }
+    
     
     
 }

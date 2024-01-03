@@ -19,14 +19,12 @@ public class ModuleRepositoryImple implements ModuleRepository{
     private final String SQL_ARCHIVER="UPDATE `module` SET `isArchived`= ? WHERE id = ?";
     private final String SQL_SELECT_ALL="SELECT * FROM `module` where isArchived=false";
     private final String SQL_UPDATE="UPDATE `module` SET `libelle` = ? WHERE id = ? ";
-    private final String SQL_FIND_ALL_PROFESSEUR_BY_MODULE="SELECT * FROM `profmodule` where idMod=?";
+    private final String SQL_SELECT_MODULE_BY_ID="SELECT * FROM `module` where isArchived=? AND id=?";
 
     private Database database;
-    private ProfesseurRepository professeurRepository;
     private ModuleRepository moduleRepository;
-    public ModuleRepositoryImple(Database database,ProfesseurRepository professeurRepository){
+    public ModuleRepositoryImple(Database database){
         this.database=database;
-        this.professeurRepository=professeurRepository;
         
     }
     @Override
@@ -51,9 +49,24 @@ public class ModuleRepositoryImple implements ModuleRepository{
     }
 
     @Override
-    public Module findById(int arg0) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    public Module findById(int id) {
+        try {
+            database.openConnexion();
+                   database.initPreparedStatement(SQL_SELECT_MODULE_BY_ID);
+                    database.getPs().setBoolean(1,false);
+                   database.getPs().setInt(2,id);
+                   ResultSet resultSet=database.executeSelect();
+                   if (resultSet.next()) {
+                       
+                       Module module=new Module(resultSet.getInt("id")
+                                        ,resultSet.getString("libelle"));
+                       return module;
+
+                   }
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+       return null;
     }
 
     @Override
@@ -104,26 +117,5 @@ public class ModuleRepositoryImple implements ModuleRepository{
         return true;
     }
     
-
-    @Override
-    public ArrayList<Professeur> getProfesseur(Module module) {
-        ArrayList<Professeur> professeurs=new ArrayList<>();
-        try {
-            database.openConnexion();
-            database.initPreparedStatement(SQL_FIND_ALL_PROFESSEUR_BY_MODULE);
-            database.getPs().setInt(1, module.getId());
-            ResultSet resultSet= database.executeSelect();
-            while (resultSet.next()) {
-                professeurs.add(professeurRepository.findById(resultSet.getInt("id")));
-            }
-            resultSet.close();
-            database.closeConnexion();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return professeurs;
-    }
 
 }
