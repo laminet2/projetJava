@@ -15,4 +15,6 @@ public interface ProfesseurService {
 
     Map<Classe,ArrayList<Module>> afficherClasseAndModuleEnseignerByProfesseur(Professeur professeur,Classe classe);
     ArrayList<Module> afficherModuleByProfesseur(Professeur prof);
+    boolean affecterModuleAProfesseur(Professeur prof,Module module);
+    boolean professeurExiste(Professeur professeur);
 }

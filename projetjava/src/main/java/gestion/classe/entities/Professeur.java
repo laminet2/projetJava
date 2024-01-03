@@ -11,9 +11,14 @@ import lombok.NoArgsConstructor;
 public class Professeur {
     private int id;
     private String nomComplet;
-    private boolean isArchived;
+    private boolean isArchived=false;
     private ArrayList<Classe>classes;
     private ArrayList<Module>modules;
+
+    public Professeur(int id,String nomComplet){
+        this.id=id;
+        this.nomComplet=nomComplet;
+    }    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -40,5 +45,6 @@ public class Professeur {
             return false;
         return true;
     } 
+
     
 }

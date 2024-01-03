@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class Salle {
     private int id;  
     private String libelle;
-    private boolean isArchived;
+    private boolean isArchived=false;
     private String lieux;
     @Override
     public int hashCode() {

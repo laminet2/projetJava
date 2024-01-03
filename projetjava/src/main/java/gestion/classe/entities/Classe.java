@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
+@Data
 public class Classe {
     private int id;
     private String libelle;
@@ -21,7 +23,6 @@ public class Classe {
     private String filiere;
     private ArrayList<Professeur> professeurs=new ArrayList<>();
     private ArrayList<Cours> cours=new ArrayList<>();
-    private Map<Professeur,ArrayList<Module>> professeurModules = new HashMap<>();
        
     public Classe(int id,String nomClasse,String niveauLibelle,String filiereLibelle){
         this.id=id;

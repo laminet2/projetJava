@@ -18,26 +18,27 @@ public class ProfesseurServiceImple implements ProfesseurService{
 
     @Override
     public int ajouterProfesseur(Professeur professeur) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ajouterProfesseur'");
+        if(professeurExiste(professeur)){
+            return 0;
+        }
+        return professeurRepository.insertOrUpdate(professeur);
     }
 
     @Override
     public ArrayList<Professeur> listerProfesseur() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listerProfesseur'");
+        return professeurRepository.findAll();
     }
 
     @Override
     public boolean modifierProfesseur(Professeur professeur) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modifierProfesseur'");
+        return professeurRepository.insertOrUpdate(professeur)==1;
     }
+
+    
 
     @Override
     public boolean archiverPorfesseur(Professeur professeur) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'archiverPorfesseur'");
+        return professeurRepository.archiver(professeur);
     }
 
     @Override
@@ -51,6 +52,23 @@ public class ProfesseurServiceImple implements ProfesseurService{
     public ArrayList<Module> afficherModuleByProfesseur(Professeur prof) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'afficherModuleByProfesseur'");
+    }
+
+    @Override
+    public boolean professeurExiste(Professeur professeur) {
+        ArrayList<Professeur> professeurs=professeurRepository.findAll();
+        for (Professeur prof : professeurs) {
+        
+            if(professeur.equals(prof)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean affecterModuleAProfesseur(Professeur prof, Module module) {
+        return professeurRepository.addModuleProf(prof,module);
     }
     
 }

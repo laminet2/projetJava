@@ -63,8 +63,8 @@ public class MySql implements Database{
         ResultSet rs=null;
           try {   
             rs=ps.executeQuery();
-        } catch (SQLException e) {
-            System.out.println("Erreur Execution de la requete");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return rs;
     }
@@ -82,8 +82,8 @@ public class MySql implements Database{
         int nbreLigne=0;
        try {
             nbreLigne=ps.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Erreur Execution de la requete");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return nbreLigne;
     }

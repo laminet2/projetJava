@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import gestion.classe.entities.Classe;
 import gestion.classe.entities.Module;
+import gestion.classe.entities.Professeur;
+import gestion.classe.repository.ClasseRepository;
 import gestion.classe.repository.ModuleRepository;
 import gestion.classe.services.ModuleService;
 
@@ -14,33 +16,46 @@ public class ModuleServiceImple implements ModuleService{
     }
     @Override
     public ArrayList<Module> listerModule() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listerModule'");
+        return moduleRepository.findAll();
     }
     @Override
     public boolean archiverModule(Module module) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'archiverModule'");
+        return moduleRepository.archiver(module);
     }
     @Override
     public boolean modifierModule(Module module) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modifierModule'");
+        return moduleRepository.insertOrUpdate(module)==1;
     }
     @Override
     public int ajouterModule(Module module) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ajouterModule'");
+        if(moduleExiste(module)){
+            return 0;
+        }
+        return moduleRepository.insertOrUpdate(module);
     }
-    @Override
-    public boolean affecterModuleAUneClasse(Module module, Classe classe) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'affecterModuleAUneClasse'");
-    }
+
+   
     @Override
     public ArrayList<Classe> afficherClasseByModule(Module module) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'afficherClasseByModule'");
+    }
+
+    @Override
+    public boolean moduleExiste(Module module){
+        ArrayList<Module> modules=moduleRepository.findAll();
+        for (Module module2 : modules) {
+        
+            if(module2.equals(module)){
+                return true;
+            }
+        }
+        return false;
+
+    }
+    @Override
+    public ArrayList<Professeur> listerProfesseurByModule(Module module) {
+        return moduleRepository.getProfesseur( module);
     }
     
     

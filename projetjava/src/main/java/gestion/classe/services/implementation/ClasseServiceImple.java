@@ -9,6 +9,7 @@ import gestion.classe.entities.Cours;
 import gestion.classe.entities.Filiere;
 import gestion.classe.entities.Module;
 import gestion.classe.entities.Niveau;
+import gestion.classe.entities.Professeur;
 import gestion.classe.repository.ClasseRepository;
 import gestion.classe.services.ClasseService;
 
@@ -80,10 +81,22 @@ public class ClasseServiceImple implements ClasseService{
     @Override
     public List<Niveau> listerNiveaux() {
       
-         return Arrays.asList(new Niveau("Licence1"),new Niveau("Licence2")
-         ,new Niveau("Licence3"));
+         return Arrays.asList(new Niveau("L1"),new Niveau("L2")
+         ,new Niveau("L3"));
     }
 
+    @Override
+    public boolean affecterModuleAUneClasse(Module module,Professeur professeur, Classe classe) {
+        return classeRepository.addModuleClasse(classe, professeur, module);
+
+        // classeRepository.getModulesClasse(classe).putIfAbsent(professeur, new ArrayList<Module>());
+        // if(!classe.getProfesseurModules().get(professeur).contains(module)){
+        //     classe.getProfesseurModules().get(professeur).add(module);
+        //     classeRepository.insertOrUpdate(classe);
+        //     return true;  
+        //   }
+        // return false;  
+    }
     
 
     

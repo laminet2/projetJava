@@ -8,6 +8,7 @@ import gestion.classe.entities.Cours;
 import gestion.classe.entities.Filiere;
 import gestion.classe.entities.Module;
 import gestion.classe.entities.Niveau;
+import gestion.classe.entities.Professeur;
 
 public interface ClasseService {
     int ajouterClasse(Classe classe);
@@ -20,6 +21,7 @@ public interface ClasseService {
 
     List<Filiere> listerFiliere();
     List<Niveau> listerNiveaux();
-
+    
+    boolean affecterModuleAUneClasse(Module module,Professeur professeur,Classe classe);
     boolean classeExiste(Classe classe);
 }

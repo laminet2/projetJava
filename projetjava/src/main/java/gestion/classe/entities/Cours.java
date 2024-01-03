@@ -17,7 +17,7 @@ public class Cours {
     private Professeur professeur;
     private LocalTime heureDebut;
     private LocalTime heureFin;
-    private boolean isArchived;
+    private boolean isArchived=false;
     private Module module;
     private ArrayList<Classe>classes;
     @Override
