@@ -17,31 +17,26 @@ public class SalleServiceImple implements SalleService{
 
     @Override
     public ArrayList<Salle> listerSalle() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listerSalle'");
+        return salleRepository.findAll();
     }
 
     @Override
     public int ajouterSalle(Salle salle) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'ajouterSalle'");
+        return salleRepository.insertOrUpdate(salle);
     }
 
     @Override
     public boolean modifierSalle(Salle salle) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'modifierSalle'");
+       return salleRepository.insertOrUpdate(salle)!=0;
     }
 
     @Override
     public boolean archiverSalle(Salle salle) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'archiverSalle'");
+        return salleRepository.archiver(salle);
     }
 
     @Override
-    public ArrayList<Salle> salleDispo(LocalDate date, LocalTime heureDebut, LocalTime heureFin) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'salleDispo'");
+    public ArrayList<Salle> salleDispo(LocalDate date, LocalTime heureDebut) {
+        return salleRepository.findSalleByDateAndTime( date,  heureDebut);
     }
 }

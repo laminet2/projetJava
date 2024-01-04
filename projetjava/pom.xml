@@ -29,6 +29,15 @@
             <version>1.18.30</version>
             <scope>provided</scope>
 	    </dependency>
+
+        <!-- https://mvnrepository.com/artifact/de.vandermeer/asciitable -->
+        <dependency>
+            <groupId>de.vandermeer</groupId>
+            <artifactId>asciitable</artifactId>
+            <version>0.3.2</version>
+        </dependency>
+
+
         
     </dependencies>
 

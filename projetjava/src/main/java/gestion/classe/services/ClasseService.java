@@ -19,7 +19,7 @@ public interface ClasseService {
     ArrayList<Module> listerModulesByClasse(Classe classe);
     ArrayList<Classe> listerClasseByModule(Module module);
     ArrayList<Cours> listerCoursByClasse(Classe classe);
-
+    
     List<Filiere> listerFiliere();
     List<Niveau> listerNiveaux();
 

@@ -11,6 +11,11 @@ public class Salle {
     private int id;  
     private String libelle;
     private boolean isArchived=false;
+    public Salle(int id,String libelle){
+        this.id=id;
+        this.libelle=libelle;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

@@ -2,6 +2,9 @@ package gestion.classe.entities;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +29,16 @@ public class Cours {
     public Cours(int id,String libelle){
         this.id=id;
         this.libelle=libelle;
+    }
+    public Cours(int id,String libelle,LocalDate data,LocalTime heureDebut,LocalTime heureFin,Module module,String lieux)
+    {
+        this.id=id;
+        this.libelle=libelle;
+        this.date=data;
+        this.heureDebut=heureDebut;
+        this.heureFin=heureFin;
+        this.module=module;
+        this.lieux=lieux;
     }
     @Override
     public int hashCode() {
@@ -83,5 +96,31 @@ public class Cours {
             return false;
         return true;
     }
+   
+    public Map<String, String> toTable(){
+        Map<String, String> informations = new HashMap<>();
+        informations.put("Date", date.toString());
+        informations.put("Module", module.getLibelle());
+        informations.put("Professeur", professeur.getNomComplet());
+        informations.put("Lieux", lieux);
+        if(lieux.equals("EN PRESENTIEL")){
+            informations.put("Salle", salle.getLibelle());
+        }else{
+            informations.put("Lien", lien);
+        }
+        informations.put("HeureDebut", heureDebut.toString());
+        informations.put("HeureFin", heureFin.toString());
+        return informations;  
+    }
+    
+    @Override
+    public String toString(){
+        String tete= "[ Date: "+date+ " Module:"+module.getLibelle()+" Heure Debut:"+this.heureDebut+" HeureFin:"+heureFin+" Lieux:"+this.lieux ;
+        if(lieux.equals("EN PRESENTIEL")){
+                    return tete+" "+this.salle +"]";
 
+        }else{
+                    return tete+" "+this.lien +"]";
+        }
+    }
 }

@@ -27,7 +27,7 @@ public class ProfesseurRepositoryImple implements ProfesseurRepository{
     private final String SQL_SELECT_PROF_BY_ID="SELECT * FROM professeur where isArchived=? AND id=?";
     private final String SQL_SELECT_CLASSE_BY_PROF="SELECT * FROM classeprofesseur where idProf=?";
     private final String SQL_FIND_ALL_PROFESSEUR_BY_MODULE="SELECT * FROM `profmodule` where idMod=?";
-    private final String SQL_FIND_CLASSE_BY_PORFESSEUR_AND_MODULE="SELECT * FROM `profmodule` where `idProf`= ? and `idMod`= ?   ";
+    private final String SQL_FIND_CLASSE_BY_PORFESSEUR_AND_MODULE="SELECT * FROM `classeprofesseur` where `idProf`= ? and `idModule`= ?   ";
 
 
     public ProfesseurRepositoryImple(Database database,ClasseRepository classeRepository,ModuleRepository moduleRepository){

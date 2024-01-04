@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
+import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciitable.CWC_LongestWord;
+
+
 import com.database.services.Database;
 
 import gestion.classe.entities.Classe;
@@ -30,10 +34,13 @@ import jsontomap.JsonToMap;
 
 import com.database.services.implementation.*;
 
+import de.vandermeer.asciitable.AsciiTable;
+import de.vandermeer.asciitable.CWC_LongestWord;
+
 public class App{
     static Database sgbd=new MySql("jdbc:mysql://localhost:3306/javaprojetdatabase","root","");
 
-    static JsonToMap json= new JsonToMap("configuration.json");
+    static JsonToMap json= new JsonToMap("C:\\Users\\TRAORE\\OneDrive\\Bureau\\java\\javaProject\\projetjava\\configuration.json");
     static Map <String,String> data=json.convert();
     
     
@@ -52,7 +59,7 @@ public class App{
         //ClasseRepository
         Class classeRepositoryImplementation=Class.forName(data.get("classeRepository"));
         // ClasseRepository classeRepository =(ClasseRepository) classeRepositoryImplementation.newInstance();
-         constructor = classeRepositoryImplementation.getConstructor(Database.class,ProfesseurRepository.class,ModuleRepository.class);
+         constructor = classeRepositoryImplementation.getConstructor(Database.class,ModuleRepository.class);
         ClasseRepository classeRepository =(ClasseRepository) constructor.newInstance(sgbd,moduleRepository);
 
         //ClasseService
@@ -69,17 +76,6 @@ public class App{
         Class professeurServiceClass=Class.forName(data.get("professeurService"));
         constructor = professeurServiceClass.getConstructor(ProfesseurRepository.class);
         ProfesseurService professeurService=(ProfesseurService) constructor.newInstance(professeurRepository);
-
-        //CoursRepository
-        Class coursRepositoryImplementation=Class.forName(data.get("coursRepository"));
-        constructor = coursRepositoryImplementation.getConstructor(Database.class);
-        CoursRepository coursRepository =(CoursRepository) constructor.newInstance(sgbd);
-
-        //CoursServices
-        Class coursServiceImplementation= Class.forName(data.get("coursService")) ;
-        constructor = coursServiceImplementation.getConstructor(CoursRepository.class);
-        CoursService coursService=(CoursService) constructor.newInstance(coursRepository);
-
         //SalleRepository
         Class salleRepositoryCLASS=Class.forName(data.get("salleRepository"));
         constructor=salleRepositoryCLASS.getConstructor(Database.class);
@@ -91,7 +87,15 @@ public class App{
         constructor=salleServiceClass.getConstructor(SalleRepository.class);
         SalleService salleService=(SalleService) constructor.newInstance(salleRepository);
 
+        //CoursRepository
+        Class coursRepositoryImplementation=Class.forName(data.get("coursRepository"));
+        constructor = coursRepositoryImplementation.getConstructor(Database.class,ModuleRepository.class,SalleRepository.class);
+        CoursRepository coursRepository =(CoursRepository) constructor.newInstance(sgbd,moduleRepository,salleRepository);
 
+        //CoursServices
+        Class coursServiceImplementation= Class.forName(data.get("coursService")) ;
+        constructor = coursServiceImplementation.getConstructor(CoursRepository.class);
+        CoursService coursService=(CoursService) constructor.newInstance(coursRepository);
 
         classeService.listerClasses();
         Scanner sc = new Scanner(System.in);
@@ -510,114 +514,72 @@ public class App{
                     choix1=sc.nextInt();
                     switch (choix1) {
                         case 1:
-                                classeService.listerClasses()
+                                salleService.listerSalle()
                                       .forEach(System.out::println); 
                                 Thread.sleep(3000);
                             break;
                         case 2:
                             sc.nextLine();
+                            System.out.println("Entrer le libelle de la salle");
+                            String libelle=sc.nextLine();
 
-                            System.out.println("Choisir une Filiere");
-                            classeService.listerFiliere().forEach(System.out::println);
-                            int idFiliere=sc.nextInt();
+                            Salle salle=new Salle(0,libelle);
 
-                            System.out.println("Choisir un Niveau");
-                            classeService.listerNiveaux().forEach(System.out::println);
-                            int idNiveau=sc.nextInt();
-
-                            Filiere filiereSelect=classeService.listerFiliere().get(idFiliere-1);
-                            Niveau niveauSelect=classeService.listerNiveaux().get(idNiveau-1);
-                            String nomClasse=String.format("%s %s",niveauSelect.getLibelle(),filiereSelect.getLibelle());
-
-                            Classe classe=new Classe(0,nomClasse,niveauSelect.getLibelle(),filiereSelect.getLibelle());
-
-                            if(classeService.ajouterClasse(classe)!=0){
+                            if(salleService.ajouterSalle(salle)!=0){
                                 System.out.println("--- Succes ---");
-                                System.out.println("Classe ajouter avec success");
+                                System.out.println("Salle ajouter avec success");
                                 System.out.println("--- Succes ---");
 
                               }else{
                                 System.out.println("--- Failure ---");
-                                System.out.println("Classe Already Define");
+                                System.out.println("Salle Already Define");
                                 System.out.println("--- Failure ---");
 
                               }
                             Thread.sleep(3000);
                             break;
                         case 3:
-                            System.out.println("Selectionner la Classe");
+                            System.out.println("Selectionner la Salle");
         
-                              classes=classeService.listerClasses();
+                             ArrayList<Salle> salles= salleService.listerSalle();
                                 i=0;
-                              for (Classe cl  : classes) {
+                              for (Salle sal  : salles) {
                                 i++;
-                                System.out.println(String.format("%d) %s",i,cl.getLibelle()));
+                                System.out.println(String.format("%d) %s",i,sal.getLibelle().toUpperCase()));
                               }
-                               classeSelect=classeService.listerClasses().get(sc.nextInt() - 1);
+                              Salle salleSelct=salleService.listerSalle().get(sc.nextInt() - 1);
                               //Modifier quoi ?
                               System.out.println("Voulez vous modifier le libelle [oui,non]");
                               sc.nextLine();
                               String ok=sc.nextLine();
                               if((ok.toLowerCase()).equals("oui")){
                                 System.out.println("Entrer le nouveau libelle");
-                                classeSelect.setLibelle(sc.nextLine());
+                                salleSelct.setLibelle(sc.nextLine());
                               }
-                              System.out.println("Voulez vous modifier le niveau [oui,non]");
-                              ok=sc.nextLine();
-                              if((ok.toLowerCase()).equals("oui")){
-                                System.out.println("Choisir un Niveau");
-
-                                List<Niveau> niveaux=classeService.listerNiveaux();
-                                i=0;
-                                for (Niveau niv  : niveaux) {
-                                    i++;
-                                    System.out.println(String.format("%d) %s",i,niv.getLibelle()));
-                                }
-                                 idNiveau=sc.nextInt();     
-                                 niveauSelect=classeService.listerNiveaux().get(idNiveau-1);
-                                 classeSelect.setNiveau(niveauSelect.getLibelle());
-                                }
-
-                                System.out.println("Voulez vous modifier la filiere [oui,non]");
-                                sc.nextLine();
-                                ok=sc.nextLine();
-                                if((ok.toLowerCase()).equals("oui")){
-                                    System.out.println("Choisir une Filiere");
-                                    List<Filiere> filieres=classeService.listerFiliere();
-                                    i=0;
-                                    for (Filiere filiere  : filieres) {
-                                        i++;
-                                        System.out.println(String.format("%d) %s",i,filiere.getLibelle()));
-                                    }
-
-                                    idFiliere=sc.nextInt();     
-                                    filiereSelect=classeService.listerFiliere().get(idFiliere-1);
-                                    classeSelect.setFiliere(filiereSelect.getLibelle());
-                                }
+                              
                             
-                                if(classeService.modifierClasse(classeSelect)){
+                                if(salleService.modifierSalle(salleSelct)){
                                     System.out.println("--- Update ---");
-                                    System.out.println("Classe Update");
+                                    System.out.println("Salle Update");
                                     System.out.println("--- Update ---");
                                 }
                               Thread.sleep(3000);
                               break;
                         case 4:
-                              System.out.println("Selectionner la Classe");
+                              System.out.println("Selectionner la Salle");
         
-                              classes=classeService.listerClasses();
+                              salles=salleService.listerSalle();
                                 i=0;
-                              for (Classe cl  : classes) {
+                              for (Salle sal  : salles) {
                                 i++;
-                                System.out.println(String.format("%d) %s",i,cl.getLibelle()));
+                                System.out.println(String.format("%d) %s",i,sal.getLibelle()));
                               }
-                               classeSelect=classeService.listerClasses().get(sc.nextInt() - 1);
-                                classeService.archiverClasse(classeSelect);
-                                 System.out.println("--- Archiver ---");
-                                    System.out.println("Classe Archiver avec succes");
+                               salleSelct=salleService.listerSalle().get(sc.nextInt() - 1);
+                                salleService.archiverSalle(salleSelct);
+                                  System.out.println("--- Archiver ---");
+                                    System.out.println("Salle Archiver avec succes");
                                     System.out.println("--- Archiver ---");
-                                    Thread.sleep(3000);
-
+                                  Thread.sleep(3000);
                               break;
                         default:
                             break;
@@ -668,40 +630,38 @@ public class App{
                    }else{
                       classesSelect.add(classeSelect);
                    }
-                   System.out.println("voulez vous rajouter une classe ? ");
+                   System.out.println("voulez vous rajouter une classe ? [oui,non]");
                     sc.nextLine();
                     answer=sc.nextLine();
-                  }while(answer.toUpperCase().equals("oui"));
+                  }while(answer.toUpperCase().equals("OUI"));
                   cours.setClasses(classesSelect);
 
                   System.out.print("Veuillez saisir une date (format yyyy-MM-dd) : ");
                   String inputDate = sc.nextLine();
-                  LocalDate dateSelect;
                  
-                     dateSelect = LocalDate.parse(inputDate);
-
-                  
-
-                  System.out.print("Veuillez saisir l'heure de début du cours (format HH:mm:ss) : ");
+                  LocalDate dateSelect = LocalDate.parse(inputDate);
+                  cours.setDate(dateSelect);
+                  System.out.print("Veuillez saisir l'heure de début du cours (format HH:mm) : ");
                   String inputTime = sc.nextLine();
                   LocalTime heureDebutSelect;
          
             
-                      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
 
                        heureDebutSelect = LocalTime.parse(inputTime, formatter);
-                  
+                        cours.setHeureDebut(heureDebutSelect);
 
-                  System.out.print("Veuillez saisir l'heure de fin du cours (format HH:mm:ss) : ");
+
+                  System.out.print("Veuillez saisir l'heure de fin du cours (format HH:mm) : ");
                    inputTime = sc.nextLine();
                    LocalTime heureFinSelect;
             
-                    formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+                    formatter = DateTimeFormatter.ofPattern("H:mm");
                     heureFinSelect = LocalTime.parse(inputTime, formatter);
+                    cours.setHeureFin(heureFinSelect);
                   
                   
-                  
-                  if(salleService.salleDispo(dateSelect,heureDebutSelect,heureFinSelect)==null){
+                  if(salleService.salleDispo(dateSelect,heureDebutSelect)==null){
                       System.out.println("Aucune Salle n'est dispo a cette date et heure-ce pourquoi il ne peut se faire qu'en ligne");
                       cours.setLieux("EN LIGNE");
 
@@ -729,24 +689,104 @@ public class App{
                     }else{
                       //Lister les salles dispo;
                       System.out.println("Voici les salles dispo slectionnez en une");
-                      ArrayList<Salle> salles= salleService.salleDispo(dateSelect,heureDebutSelect,heureFinSelect);
+                      ArrayList<Salle> salles= salleService.salleDispo(dateSelect,heureDebutSelect);
                       i=0;
                       for (Salle salle : salles) {
                         i++;
                         System.out.println(i+")"+salle.getLibelle());
                       }
-                      Salle salleSelect= salles.get(sc.nextInt());
+                      Salle salleSelect= salles.get(sc.nextInt()-1);
                       cours.setSalle(salleSelect);
                     }
-                  
-
+                    if(coursService.plannifierCours(cours)){
+                      System.out.println("--- PLANNIFER ---");
+                                    System.out.println("Cours Plannifier avec succes");
+                                    System.out.println("--- PLANNIFER ---");
+                    }else{
+                       System.out.println("--- FAILED ---");
+                                    System.out.println("Cours NOT Plannifier ");
+                                    System.out.println("--- FAILED ---");
+                    }      Thread.sleep(3000);
                     break;
                 case 10:
-                    //Afiicher les cours d'une classes
+                    //Afiicher les cours d'une classe
+                      System.out.println("Choissiser la classe a qui on doit affecter le module");
+                    classes=classeService.listerClasses();
+                     i=0;
+                     for (Classe cl  : classes) {
+                       i++;
+                        System.out.println(String.format("%d) %s",i,cl.getLibelle()));
+                      }
+                       classeSelect=classes.get(sc.nextInt() - 1);                   
+
+                      // //TRAITEMENT
+                       ArrayList<Cours> listeCours=coursService.listerCoursByClasse(classeSelect);
+                       listeCours.forEach(System.out::println);
+                      // String leftAlignFormat = "| %-15s | %-4s | %-4s | %-4s |%-4s |%-4s |%-4s |%-4s |%n";
+
+                      // System.out.format("+----------+----------+------------+-------+--------+-----+-------------+-----------%n");
+                      // System.out.format("| Date     | Module   | Professeur | Lieux | Salle | Lien | Heure Debut | Heure Fin %n");
+                      // System.out.format("+----------+----------+------------+-------+--------+-----+-------------+-----------%n");
+
+                      // for (Cours cour : listeCours) {
+                      //   String value=    cour.getDate().toString()+" "+cour.getModule().getLibelle()+" "+" "+cour.getLieux()+" "+cour.getHeureDebut()+" "+cour.getHeureFin();
+                      //     System.out.println(value);
+                      // }
+                      // System.out.format("+----------+----------+------------+-------+--------+-----+-------------+-----------%n");
+                 
+                        // String[] entete={"Date","Module","Professeur","Lieux","Salle","Lien","HeureDebut","HeureFin"};
+                        //     AsciiTable table = new AsciiTable();
+                        //     table.addRule();
+                        //     for (String entry : entete) {
+                        //       table.addRow(entry);
+                        //       table.addRule();
+                        //   }
+                        //   for (Cours cour : listeCours) {
+                        //     Map<String, String>informations=cour.toTable();
+                        //     for (Map.Entry<String, String> entry : informations.entrySet()) {
+                        //       table.addRow(entry.getValue());
+                        //       table.addRule();
+                        //     }
+                        //   }
+
+                          
+                          
+
+        // Configurer la largeur des colonnes en fonction du mot le plus long dans chaque colonne
+
+        // Afficher la table
+
+
+                      Thread.sleep(4000);
                     break;
                 case 11:
                     //Afiicher les cours d'un professeur
+                    System.out.println("Selectionner le professeur");
+        
+                              professeurs=professeurService.listerProfesseur();
+                              i=0;
+                              for (Professeur prof  : professeurs) {
+                                i++;
+                                System.out.println(String.format("%d) %s",i,prof.getNomComplet()));
+                              }
+                         professeurSelect=professeurService.listerProfesseur().get(sc.nextInt() - 1);
+                      //Traitement
+                      listeCours= coursService.listerCoursByProfesseur(professeurSelect);
+                      listeCours.forEach(System.out::println);
 
+                      // //Affichage sous forme de tableau
+                      //  leftAlignFormat = "| %-15s | %-4s | %-4s | %-4s |%-4s |%-4s |%-4s |%-4s |%n";
+
+                      // System.out.format("+----------+----------+------------+-------+--------+-----+-------------+-----------%n");
+                      // System.out.format("| Date     | Module   | Classe     | Lieux | Salle | Lien | Heure Debut | Heure Fin %n");
+                      // System.out.format("+----------+----------+------------+-------+--------+-----+-------------+-----------%n");
+
+                      // for (Cours cour : listeCours) {
+                      //     System.out.format(leftAlignFormat,cour.getDate().toString() ,cour.getModule().getLibelle(),cour.getClasses().forEach(System.out::println),cour.getLieux(),cour.getHeureDebut(),cour.getHeureFin());
+                      // }
+                      // System.out.format("+----------+----------+------------+-------+--------+-----+-------------+-----------%n");
+
+                      Thread.sleep(4000);
                     break;
                 case 12:
                     //Affecter un module a un prof
@@ -778,7 +818,6 @@ public class App{
 
                     }
                            Thread.sleep(3000);
-
                     break;
                 case 13:
                     System.out.println("------ GOOD-BYE ------");
